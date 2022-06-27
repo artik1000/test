@@ -10,7 +10,7 @@
             <div class="inp" v-if="first">
                 <div class="sersel">
                     <div
-                            @click="maininputall(elem)"
+                            @click="maininputall()"
                         >Select all
                     </div>
                     <div>
@@ -20,8 +20,8 @@
                 <ElementList
                         v-for="elem of SearchFun"
                         :key="elem.id"
-                        @click="elem.selected = !elem.selected; elemminus(elem)"
-                        v-bind:class="{active: elem.selected, active2: all}"
+                        @click="elemminus(elem)"
+                        v-bind:class="{active: elem.selected}"
                         v-bind:elem="elem"
                 />
                 <div>
@@ -46,8 +46,7 @@ export default {
             errors: [],
             first: false,
             searchvalue: '',
-            maininput:'',
-            all: false
+            maininput:''
         }
     },
     methods: {
@@ -57,21 +56,23 @@ export default {
         reset (){
             this.maininput = ' ';
             this.first = !this.first;
-            this.all = false;
+            var max = this.categories.length;
+            for (var i = 0; i < max; i++) {
+            this.categories[i].selected = false;
+            }
         },
         maininputall() {
             var max = this.categories.length;
             for (var i = 0; i < max; i++) {
+                this.categories[i].selected = true;
                 this.maininput = this.maininput + ' ' + this.categories[i].name;
-                this.all = true;
             }
         },
         elemminus (elem){
-            this.all = false;
-            console.log(elem.selected);
-            if (elem.selected === false)
+            this.categories[elem.id].selected = !this.categories[elem.id].selected;
+            if (this.categories[elem.id].selected === false)
             {this.maininput = this.maininput.replace(elem.name,'')}
-            if(elem.selected ===true){
+            if(this.categories[elem.id].selected ===true){
             this.maininput = this.maininput + ' ' + elem.name;
             }
 
