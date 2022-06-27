@@ -1,6 +1,5 @@
 <template>
-    <form action="#" method="post" id="filter" onsubmit="return false" onload="beforeMount()">
-        <div>
+        <div onload="beforeMount()">
             <div class="sel">
                 <div @click="ShowFirst()"><input type="text" v-model="maininput"/></div>
                 <div
@@ -25,12 +24,10 @@
                         v-bind:elem="elem"
                 />
                 <div>
-                    <input style="width: 100%" type="submit" value="Apply"/>
+                    <button style="width: 100%" @click="PostVid">Aply</button>
                 </div>
             </div>
         </div>
-        <div><input type="submit" v-on:click="getRequest()" value="send"/></div>
-    </form>
 </template>
 <script>
 import axios from 'axios'
@@ -62,6 +59,7 @@ export default {
             }
         },
         maininputall() {
+            this.maininput = ' ';
             var max = this.categories.length;
             for (var i = 0; i < max; i++) {
                 this.categories[i].selected = true;
@@ -75,7 +73,31 @@ export default {
             if(this.categories[elem.id].selected ===true){
             this.maininput = this.maininput + ' ' + elem.name;
             }
+        },
+        PostVid (){
+            axios({
+                method: 'post',
+                url: 'https://lobster.tools/api/v1/categories',
+                // url: 'https://lobster.tools/api/v1/projects',
+                data: {
+                    name: this.maininput,
+                    selected: false,
+                },
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8",
+                    'Access-Control-Allow-Headers': 'x-requested-with, Content-Type, origin, authorization, accept, x-access-token',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
+                    'Access-Control-Allow-Max-Age': '1000',
+                    'Authorization': 'Bearer BT3HK2NpCnyrKiDo',
+                },
 
+            })
+                .then(response => {this.categories = response.data})
+                .catch(function(error) {
+                    console.log(error);
+                });
+            this.reset();
         }
     },
     computed: {
