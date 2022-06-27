@@ -57,6 +57,7 @@ export default {
         reset (){
             this.maininput = ' ';
             this.first = !this.first;
+            this.all = false;
         },
         maininputall() {
             var max = this.categories.length;
@@ -66,6 +67,7 @@ export default {
             }
         },
         elemminus (elem){
+            this.all = false;
             console.log(elem.selected);
             if (elem.selected === false)
             {this.maininput = this.maininput.replace(elem.name,'')}
