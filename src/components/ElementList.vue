@@ -1,7 +1,5 @@
 <template>
     <div class="elem"
-         v-bind:class="{active: isActive}"
-         @click="isActive = !isActive"
     >{{elem.name}}</div>
 </template>
 <script>
@@ -26,10 +24,6 @@ export default {
         width: 100%;
     }
     .elem:hover{
-        background-color: red;
-        color: white;
-    }
-    .active{
         background-color: red;
         color: white;
     }

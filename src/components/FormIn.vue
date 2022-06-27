@@ -10,7 +10,7 @@
             <div class="inp" v-if="first">
                 <div class="sersel">
                     <div
-                            @click="maininputall"
+                            @click="maininputall(elem)"
                         >Select all
                     </div>
                     <div>
@@ -20,7 +20,8 @@
                 <ElementList
                         v-for="elem of SearchFun"
                         :key="elem.id"
-                        @click="this.maininput = this.maininput + ' ' + elem.name"
+                        @click="elem.selected = !elem.selected; elemminus(elem)"
+                        v-bind:class="{active: elem.selected, active2: all}"
                         v-bind:elem="elem"
                 />
                 <div>
@@ -46,6 +47,7 @@ export default {
             first: false,
             searchvalue: '',
             maininput:'',
+            all: false
         }
     },
     methods: {
@@ -60,8 +62,18 @@ export default {
             var max = this.categories.length;
             for (var i = 0; i < max; i++) {
                 this.maininput = this.maininput + ' ' + this.categories[i].name;
+                this.all = true;
             }
         },
+        elemminus (elem){
+            console.log(elem.selected);
+            if (elem.selected === false)
+            {this.maininput = this.maininput.replace(elem.name,'')}
+            if(elem.selected ===true){
+            this.maininput = this.maininput + ' ' + elem.name;
+            }
+
+        }
     },
     computed: {
         SearchFun() {
@@ -72,6 +84,8 @@ export default {
             axios({
                 method: 'get',
                 url: ' http://localhost:3000/categories:',
+                // url: 'https://lobster.tools/api/v1/categories',
+                // url: 'https://lobster.tools/api/v1/projects',
                 headers: {
                     "Content-type": "application/json; charset=UTF-8",
                     'Access-Control-Allow-Headers': 'x-requested-with, Content-Type, origin, authorization, accept, x-access-token',
@@ -106,6 +120,14 @@ export default {
     .sersel{
         display: flex;
         flex-direction: row;
+    }
+    .active{
+        background-color: red;
+        color: white;
+    }
+    .active2{
+        background-color: red;
+        color: white;
     }
     form {
         display: flex;
